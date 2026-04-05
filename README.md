@@ -1,210 +1,164 @@
 <div align="center">
 
-📊 Zorvyn Finance Data & Access Control API
+# 📊 Zorvyn Finance Data & Access Control API
 
-A robust, secure, and logically structured RESTful backend for financial data processing.
+**A robust, secure, and logically structured RESTful backend for financial data processing.**
+
+[![Java 21](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
+[![Spring Boot 4.0](https://img.shields.io/badge/Spring_Boot-4.0.5-6DB33F?style=for-the-badge&logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Spring Security 7](https://img.shields.io/badge/Spring_Security-7.0-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)](https://spring.io/projects/spring-security)
+[![JWT](https://img.shields.io/badge/JWT-Stateless_Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 
 </div>
 
-📝 Overview
+---
 
-This repository contains the backend implementation for the Zorvyn FinTech Assessment. It is designed to manage users, enforce role-based access control (RBAC), and process financial records efficiently.
+## 📝 Overview
+This repository contains the backend implementation for the **Zorvyn FinTech Assessment**. It is designed to manage users, enforce role-based access control (RBAC), and process financial records efficiently.
 
 Instead of treating this as a basic CRUD assignment, this API was built using enterprise-grade design patterns focusing on data integrity, security, and performance.
 
-🏗️ Architectural Philosophy & Highlights
+---
 
-"A well-reasoned and well-structured submission will always be valued more than unnecessary complexity."
+## 🏗️ Architectural Philosophy & Highlights
 
-🔒 Stateless JWT Security: Full implementation of JSON Web Tokens via custom authentication filters.
+> *"A well-reasoned and well-structured submission will always be valued more than unnecessary complexity."*
 
-🛡️ Role-Based Access Control: Endpoint-level security using @PreAuthorize to strictly enforce what Viewers, Analysts, and Admins can do.
+* 🔒 **Stateless JWT Security:** Full implementation of JSON Web Tokens via custom authentication filters.
+* 🛡️ **Role-Based Access Control:** Endpoint-level security using `@PreAuthorize` to strictly enforce what Viewers, Analysts, and Admins can do.
+* 📦 **DTO Pattern:** Complete separation of database entities from API responses using Java `record` classes and `@JsonIgnore` to prevent sensitive data leaks (e.g., BCrypt hashes).
+* ⚡ **Database-Level Aggregation:** Dashboard metrics (Total Income, Total Expense, Net Balance) are calculated directly in the H2 database via custom JPQL queries, preventing Java memory bloat.
+* 🗑️ **Hibernate Soft Deletions:** Financial records are never hard-deleted. We utilize `@SQLDelete` and `@SQLRestriction` to maintain audit trails seamlessly.
+* 🚦 **Global Exception Handling:** A centralized `@RestControllerAdvice` guarantees clients only receive clean, predictable JSON error responses (no stack traces).
 
-📦 DTO Pattern: Complete separation of database entities from API responses using Java record classes and @JsonIgnore to prevent sensitive data leaks (e.g., BCrypt hashes).
+---
 
-⚡ Database-Level Aggregation: Dashboard metrics (Total Income, Total Expense, Net Balance) are calculated directly in the H2 database via custom JPQL queries, preventing Java memory bloat.
-
-🗑️ Hibernate Soft Deletions: Financial records are never hard-deleted. We utilize @SQLDelete and @SQLRestriction to maintain audit trails seamlessly.
-
-🚦 Global Exception Handling: A centralized @RestControllerAdvice guarantees clients only receive clean, predictable JSON error responses (no stack traces).
-
-🗄️ Data Model
+## 🗄️ Data Model
 
 The database schema is streamlined for financial record tracking.
-(GitHub natively renders the diagram below)
+*(GitHub natively renders the diagram below)*
 
+```mermaid
 erDiagram
-USER ||--o{ FINANCIAL_RECORD : manages
-USER {
-Long id PK
-String username UK
-String password
-Role role
-boolean active
-}
-FINANCIAL_RECORD {
-Long id PK
-BigDecimal amount
-TransactionType type
-String category
-LocalDate date
-String notes
-Boolean deleted
-Long user_id FK
-}
+    USER ||--o{ FINANCIAL_RECORD : manages
+    USER {
+        Long id PK
+        String username UK
+        String password
+        Role role
+        boolean active
+    }
+    FINANCIAL_RECORD {
+        Long id PK
+        BigDecimal amount
+        TransactionType type
+        String category
+        LocalDate date
+        String notes
+        Boolean deleted
+        Long user_id FK
+    }
+```
 
-
-🔐 Access Control Matrix
+## 🔐 Access Control Matrix
 
 The application strictly enforces the following permissions:
 
-Entity / Action
+| **Entity / Action** | **VIEWER** | **ANALYST** | **ADMIN** | 
+| :--- | :---: | :---: | :---: |
+| **Login / Register** | ✅ | ✅ | ✅ | 
+| **View Dashboard** | ✅ | ✅ | ✅ | 
+| **Read Records** | ✅ | ✅ | ✅ | 
+| **Create Records** | ❌ | ❌ | ✅ | 
+| **Update Records** | ❌ | ❌ | ✅ | 
+| **Delete Records** | ❌ | ❌ | ✅ |
 
-VIEWER
+## 🚀 Getting Started
 
-ANALYST
+The project uses an in-memory **H2 Database** to guarantee zero-configuration setup for reviewers.
 
-ADMIN
+### Prerequisites
+* Java 21+
+* Git
 
-Login / Register
+### Installation & Execution
 
-✅
+1. **Clone the repository**
+   ```bash
+   git clone [https://github.com/Sripaadpatel/zorvyn-finance-api.git](https://github.com/Sripaadpatel/zorvyn-finance-api.git)
+   cd zorvyn-finance-api
 
-✅
+2. **Run via Maven Wrapper**
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+    The server will start on `http://localhost:8080`
 
-✅
+## 🧪 Testing the API
 
-View Dashboard
+To simplify the evaluation process, a `@Component` `DatabaseSeeder` automatically runs on application startup. It injects mock users and financial records into the H2 database.
 
-✅
-
-✅
-
-✅
-
-Read Records
-
-✅
-
-✅
-
-✅
-
-Create Records
-
-❌
-
-❌
-
-✅
-
-Update Records
-
-❌
-
-❌
-
-✅
-
-Delete Records
-
-❌
-
-❌
-
-✅
-
-🚀 Getting Started
-
-The project uses an in-memory H2 Database to guarantee zero-configuration setup for reviewers.
-
-Prerequisites
-
-Java 21+
-
-Git
-
-Installation & Execution
-
-Clone the repository
-
-git clone [https://github.com/Sripaadpatel/zorvyn-finance-api.git](https://github.com/YOUR-USERNAME/zorvyn-finance-api.git)
-cd zorvyn-finance-api
-
-
-Run via Maven Wrapper
-
-./mvnw spring-boot:run
-
-
-The server will start on http://localhost:8080
-
-🧪 Testing the API
-
-To simplify the evaluation process, a @Component DatabaseSeeder automatically runs on application startup. It injects mock users and financial records into the H2 database.
-
-🔑 Pre-Seeded Credentials
+### 🔑 Pre-Seeded Credentials
 
 Use these to generate your JWT Bearer token:
 
-Admin: admin / password
+* **Admin:** `admin` / `password`
 
-Analyst: analyst / password
+* **Analyst:** `analyst` / `password`
 
-Viewer: viewer / password
+* **Viewer:** `viewer` / `password`
 
 <details>
 <summary><b>👉 Click here to expand the Postman Testing Guide</b></summary>
 
-1. Authenticate (Get Token)
+### 1. Authenticate (Get Token)
 
-URL: POST http://localhost:8080/api/auth/login
+* **URL:** `POST http://localhost:8080/api/auth/login`
 
-Body:
+* **Body:**
 
-{
-"username": "admin",
-"password": "password"
-}
+  ```json
+  {
+    "username": "admin",
+    "password": "password"
+  } 
+* **Action: Copy the token string from the response.**
 
+### 2. View Dashboard Metrics
 
-Action: Copy the token string from the response.
+* **URL:** `GET http://localhost:8080/api/dashboard/user/1`
 
-2. View Dashboard Metrics
+* **Auth:** Bearer Token -> *Paste Token*
 
-URL: GET http://localhost:8080/api/dashboard/user/1
+* **Response:** Shows aggregated DB values.
 
-Auth: Bearer Token -> Paste Token
+### 3. Filter Records
 
-Response: Shows aggregated DB values.
+* **URL:** `GET http://localhost:8080/api/records/user/1?type=EXPENSE`
 
-3. Filter Records
+* **Auth:** Bearer Token -> *Paste Token*
 
-URL: GET http://localhost:8080/api/records/user/1?type=EXPENSE
+### 4. Create a Record (Admin Only)
 
-Auth: Bearer Token -> Paste Token
+* **URL:** `POST http://localhost:8080/api/records/user/1`
 
-4. Create a Record (Admin Only)
+* **Auth:** Bearer Token -> *Paste Token*
 
-URL: POST http://localhost:8080/api/records/user/1
+* **Body:**
 
-Auth: Bearer Token -> Paste Token
-
-Body:
-
-{
-"amount": 250.00,
-"type": "EXPENSE",
-"category": "Software Subscriptions",
-"date": "2026-04-05",
-"notes": "Annual IDE License"
-}
-
-
+  ```json
+  {
+    "amount": 250.00,
+    "type": "EXPENSE",
+    "category": "Software Subscriptions",
+    "date": "2026-04-05",
+    "notes": "Annual IDE License"
+  }
 </details>
 
-📁 Project Structure
+## 📁 Project Structure
 
+```
 src/main/java/com/zorvyn/zorvynfinanceapi/
 ├── config/          # Startup seeder logic
 ├── controller/      # REST API endpoints & route guards
@@ -214,8 +168,9 @@ src/main/java/com/zorvyn/zorvynfinanceapi/
 ├── repository/      # Spring Data JPA & Custom JPQL queries
 ├── security/        # JWT Filters, Utils, and SecurityConfig
 └── service/         # Transactional business logic
-
+```
 
 <div align="center">
 <i>Developed for the Zorvyn FinTech Backend Developer Intern Assessment.</i>
 </div>
+
