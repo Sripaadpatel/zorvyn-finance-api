@@ -168,6 +168,7 @@ src/main/java/com/zorvyn/zorvynfinanceapi/
 ├── dto/             # Immutable data transfer records
 ├── entity/          # JPA Models with Soft Delete logic
 ├── exception/       # Global error handler mechanism
+├── postman/         # Exported Postman Collection for automated testing 🚀
 ├── repository/      # Spring Data JPA & Custom JPQL queries
 ├── security/        # JWT Filters, Utils, and SecurityConfig
 └── service/         # Transactional business logic
