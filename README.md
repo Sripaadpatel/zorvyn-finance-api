@@ -1,4 +1,7 @@
 <div align="center">
+  <img src="images/header.png" alt="Zorvyn Finance API Header" width="100%">
+</div>
+<div align="center">
 
 # 📊 Zorvyn Finance Data & Access Control API
 
