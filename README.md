@@ -3,7 +3,7 @@
 </div>
 <div align="center">
 
-# 📊 Zorvyn Finance Data & Access Control API
+# Zorvyn Finance Data & Access Control API
 
 **A robust, secure, and logically structured RESTful backend for financial data processing.**
 
